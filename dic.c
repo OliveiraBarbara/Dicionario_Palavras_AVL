@@ -72,10 +72,12 @@ void rot_dupla_direita(arvore **tree){
 	if(v->fb == 1){ /*verifico o balanceamento antigo para poder fazer o novo*/
 		u->fb = (-1);
 		p->fb = 0;
-	}else if(v->fb == (-1)){
+	}
+	if(v->fb == (-1)){
 		p->fb = 1;
 		u->fb = 0;
-	}else if(v->fb == 0){
+	}
+	if(v->fb == 0){
 		u->fb = 0;
 		p->fb = 0;
 	}
@@ -96,10 +98,12 @@ void rot_dupla_esquerda(arvore **tree){
 	if(y->fb == 1){ /*verifico o balanceamento antigo para poder fazer o novo*/
 		z->fb = 0;
 		p->fb = (-1);
-	}else if(y->fb == (-1)){
+	}
+	if(y->fb == (-1)){
 		z->fb = 1;
 		p->fb = 0;
-	}else if(y->fb == 0){
+	}
+	if(y->fb == 0){
 		z->fb = 0;
 		p->fb = 0;
 	}
@@ -165,6 +169,7 @@ void insereArvore(arvore **tree, char *str, char *id, char *sin, int *mudou){
 			nova->prox_sin = aux->prox_sin;
 			aux->prox_sin = nova;
 		}
+		*mudou = 0; /*nao fiz alteracao no tamanho da arvore*/
 	}
 }
 
