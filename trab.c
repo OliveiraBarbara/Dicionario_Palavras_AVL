@@ -1,19 +1,11 @@
-/***************************************************
-Nome: Bárbara Beatriz Bueno de Oliveira
-RGA: 2019.0743.014-8
-Implementacao 3
-Disciplina: Estruturas de Dados e Programacao I
-Professor: Ronaldo Fiorilo
-***************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "dic.h"
 
 int main(void){
-	int i, j, k;
-	char acao[MAX], string[MAX], str[3][MAX], str1[MAX], str2[MAX], id[4][3], id1[MAX], id2[MAX];
+	int i, j, k; /*Variáveis contadoras usadas na separação da string para vetor de palavras.*/
+	char acao[MAX], string[MAX], str[3][MAX], str1[MAX], str2[MAX], id[4][3], id1[3], id2[3];/*Acao: Variavel utilizada para ler qual operacao realizarei no processo // String: utilizada para ler as palavras que vai remover ou listar // Vetor Str: utilizada para separa a string de palavras com espaço, cada uma em uma posição do vetor // Str1 e Str2: usadas para ler as palavras que vou inserir ou buscar // Id1 e Id2: usadas para ler o idioma. // Vetor id: usado para armazenar o idioma e as letras no comando listar*/
 	arvore *tree;
 	
 	tree = NULL;
@@ -36,11 +28,13 @@ int main(void){
 
 		}
 		
+		/*Se for o comando busca eu leio a palavra que devo buscar e chamo a função.*/
 		if(strcmp("busca", acao) == 0){
 			scanf("%s", str1);
 			busca(tree, str1);
 		}
 		
+		/*Se for o comando remove eu leio a/as palavras que devo remover e chamo a função.*/
 		if(strcmp("remove", acao) == 0){
 			scanf("%[^\n]s", string);
 			j=0, k=0;
@@ -68,6 +62,7 @@ int main(void){
 			}
 		}
 		
+		/*Se for o comando lista eu leio o idioma (e letras do intervalo).*/
 		if(strcmp("lista", acao) == 0){
 			scanf("%[^\n]s", string);
 			j=0, k=0;
@@ -95,10 +90,10 @@ int main(void){
 			}
 		}
 			
-		scanf("%s", acao);
+		scanf("%s", acao); /*Leio novamente a acao para definir qual a proxima operacao a ser realizada*/
 	}
 	
-	libera(tree);
+	libera(tree); /*libero os espaços alocados*/
 	
 	return 0;
 }

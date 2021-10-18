@@ -1,11 +1,3 @@
-/***************************************************
-Nome: Bárbara Beatriz Bueno de Oliveira
-RGA: 2019.0743.014-8
-Implementacao 3
-Disciplina: Estruturas de Dados e Programacao I
-Professor: Ronaldo Fiorilo
-***************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

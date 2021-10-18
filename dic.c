@@ -1,11 +1,3 @@
-/***************************************************
-Nome: Bárbara Beatriz Bueno de Oliveira
-RGA: 2019.0743.014-8
-Implementacao 3
-Disciplina: Estruturas de Dados e Programacao I
-Professor: Ronaldo Fiorilo
-***************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,39 +37,39 @@ arvore *aloca(char *str, char *id, char *s){
 
 void rot_direita(arvore **tree){
 	arvore *u, *p;
-	p = (*tree);
+	p = *tree; /*p recebe o no que esta desbalanceado*/
 	
-	u = p->esq;
-	p->esq = u->dir;
-	u->dir = p;
+	u = p->esq; /*u recebe o filho esquerdo do no desbalanceado*/
+	p->esq = u->dir; /*filho esquerdo do no desbalanceado passa a ser o filho direito do u*/
+	u->dir = p; /*o filho direito do u passa a ser o proprio p*/
 	p->fb = 0;
 	u->fb = 0;
-	*tree = u;
+	*tree = u; /*novo no agora eh o u*/
 }
 
 void rot_esquerda(arvore **tree){
 	arvore *u, *p;
-	p = (*tree);
+	p = *tree; /*p recebe o no que esta desbalanceado*/
 	
-	u = p->dir;
-	p->dir = u->esq;
-	u->esq = p;
+	u = p->dir; /*u recebe o filho direito do no desbalanceado*/
+	p->dir = u->esq; /*filho direito do no desbalanceado passa a ser o filho esquerdo do u*/
+	u->esq = p; /*o filho esquerdo do u passa a ser o proprio p*/
 	p->fb = 0;
 	u->fb = 0;
-	*tree = u;
+	*tree = u; /*novo no agora eh o u*/
 }
 
 void rot_dupla_direita(arvore **tree){
 	arvore *p, *u, *v;
-	p = *tree;
-	u = p->esq;
-	v = u->dir;
+	p = *tree; /*p recebe o no que esta desbalanceado*/
+	u = p->esq; /*u recebe o filho esquerdo do no desbalanceado*/
+	v = u->dir; /*v recebe o filho direito do u*/
 	
-	u->dir = v->esq;
-	p->esq = v->dir;
-	v->esq = u;
-	v->dir = p;
-	if(v->fb == 1){
+	u->dir = v->esq; /*filho direito do u agora passa a ser o filho esquerdo de v*/
+	p->esq = v->dir; /*filho esquerdo do p passa a ser o filho direito do v*/
+	v->esq = u; /*o filho esquerdo do v passa a ser o proprio u*/
+	v->dir = p; /*o filho direito do v passa a ser o proprio p*/
+	if(v->fb == 1){ /*verifico o balanceamento antigo para poder fazer o novo*/
 		u->fb = (-1);
 		p->fb = 0;
 	}else if(v->fb == (-1)){
@@ -88,20 +80,20 @@ void rot_dupla_direita(arvore **tree){
 		p->fb = 0;
 	}
 	v->fb = 0;
-	*tree = v;
+	*tree = v; /*o no principal agora eh o v*/
 }
 
 void rot_dupla_esquerda(arvore **tree){
 	arvore *p, *z, *y;
-	p = *tree;
-	z = p->dir;
-	y = z->esq;
+	p = *tree; /*p recebe o no que esta desbalanceado*/
+	z = p->dir; /*z recebe o filho direito do no desbalanceado*/
+	y = z->esq; /*y recebe o filho esquerdo do z*/
 	
-	z->esq = y->dir;
-	p->dir = y->esq;
-	y->esq = p;
-	y->dir = z;
-	if(y->fb == 1){
+	z->esq = y->dir; /*filho esquerdo do z agora passa a ser o filho direito de y*/
+	p->dir = y->esq; /*filho direito do p passa a ser o filho esquerdo do y*/
+	y->esq = p; /*o filho esquerdo do y passa a ser o proprio p*/
+	y->dir = z; /*o filho direito do y passa a ser o proprio z*/
+	if(y->fb == 1){ /*verifico o balanceamento antigo para poder fazer o novo*/
 		z->fb = 0;
 		p->fb = (-1);
 	}else if(y->fb == (-1)){
@@ -112,7 +104,7 @@ void rot_dupla_esquerda(arvore **tree){
 		p->fb = 0;
 	}
 	y->fb = 0;
-	*tree = y;
+	*tree = y; /*o no principal agora eh o y*/
 }
 
 void insere(arvore **tree, char *str, char *id, char *sin){
@@ -123,47 +115,47 @@ void insere(arvore **tree, char *str, char *id, char *sin){
 void insereArvore(arvore **tree, char *str, char *id, char *sin, int *mudou){
 	lista_sinonimo *nova, *aux;
 
-	if(*tree == NULL){
+	if(*tree == NULL){ /*se a arvore estiver vazia ou o local que quero alocar estiver vazio, aloco um novo no na arvore*/
 		*tree = aloca(str, id, sin);
-		(*mudou) = 1;
-	}else if(strcmp(str, (*tree)->palavra) < 0){
+		(*mudou) = 1; 
+	}else if(strcmp(str, (*tree)->palavra) < 0){ /*se a nova palavra for menor lexicograficamente, chamo a função e faço o no ser inserido na subarvore esquerda*/
 		insereArvore(&(*tree)->esq, str, id, sin, mudou);
-		if(*mudou == 1){
+		if(*mudou == 1){ /*se teve um novo no inserido, verifico se precisa fazer alguma rotacao*/
 			(*tree)->fb = (*tree)->fb - 1;
 			if((*tree)->fb == -2){
 				if((*tree)->esq->fb == -1)
 					rot_direita(tree);
 				else
 					rot_dupla_direita(tree);
-				*mudou = 0;
+				*mudou = 0; /*quando faco a rotacao ja informo que esta balanceado*/
 			}else if((*tree)->fb == 0){
-				*mudou = 0;
+				*mudou = 0; /*se o fator de balanceamento ja eh 0 nao precisa ser verificado*/
 			}else if((*tree)->fb == -1){
 				*mudou = 1;
 			}
 		}
-	}else if(strcmp(str, (*tree)->palavra) > 0){
+	}else if(strcmp(str, (*tree)->palavra) > 0){ /*se a nova palavra for maior lexicograficamente, chamo a função e faço o no ser inserido na subarvore direita*/
 		insereArvore(&(*tree)->dir, str, id, sin, mudou);	
-		if(*mudou == 1){
+		if(*mudou == 1){  /*se teve um novo no inserido, verifico se precisa fazer alguma rotacao*/
 			(*tree)->fb = (*tree)->fb + 1;
 			if((*tree)->fb == 2){
 				if((*tree)->dir->fb == 1)
 					rot_esquerda(tree);
 				else
 					rot_dupla_esquerda(tree);
-				*mudou = 0;
+				*mudou = 0; /*quando faco a rotacao ja informo que esta balanceado*/
 			}else if((*tree)->fb == 0){
-				*mudou = 0;
+				*mudou = 0; /*se o fator de balanceamento ja eh 0 nao precisa ser verificado*/
 			}else if((*tree)->fb == 1){
 				*mudou = 1;
 			}
 		}
 	}else if(strcmp(str, (*tree)->palavra) == 0){ /*se a palavra já existir, aloco somento o seu novo sinonimo*/
-		if(strcmp(sin, (*tree)->primeiro_conceito->sinonimo) < 0){
+		if(strcmp(sin, (*tree)->primeiro_conceito->sinonimo) < 0){ /*se o primeiro sinonimo for menor lexicograficamente menor que o sinonimo ja inserido, insiro o novo na primeira posicao*/
 			nova = aloca_sinonimo(sin);
 			nova->prox_sin = (*tree)->primeiro_conceito;
 			(*tree)->primeiro_conceito = nova;
-		}else{
+		}else{ /*se nao procuro o lugar que ele deve ser inserido*/
 			aux = (*tree)->primeiro_conceito;
 			
 			while(aux->prox_sin != NULL && (strcmp(sin, (*tree)->primeiro_conceito->sinonimo) > 0))
@@ -228,49 +220,49 @@ void removeArvore(arvore **tree, char *str, int *mudou){
 			}	
 		}else if(strcmp(str, (*tree)->palavra) < 0){ /*se a palavra for menor lexicograficamento eu busco na subarvore esquerda o elemento que vou remover*/
 			removeArvore((&(*tree)->esq), str, mudou);
-			if(*mudou == 1){
-				(*tree)->fb = (*tree)->fb + 1;
+			if(*mudou == 1){ /*se teve um no tiver sido removido, verifico se precisa fazer alguma rotacao*/
+				(*tree)->fb = (*tree)->fb + 1; /*incremento o fator de balanceamento pois o no removido foi do lado esquerdo*/
 				if((*tree)->fb == 2){
 					if((*tree)->dir->fb >= 0){
 						rot_esquerda(tree);
 						if((*tree)->fb == -1)
-							*mudou = 0;
+							*mudou = 0; /*esta variavel é alterada para 0 para mostrar que não precisa mais ser verificado, visto que a arvore continua balanceada*/
 						else
 							*mudou = 1;
 					}else{
 						rot_dupla_esquerda(tree);
 						if((*tree)->fb == -1)
-							*mudou = 0;
+							*mudou = 0; /*esta variavel é alterada para 0 para mostrar que não precisa mais ser verificado, visto que a arvore continua balanceada*/
 						else
 							*mudou = 1;
 					}
 				}else if((*tree)->fb == 0)
 					*mudou = 1;
 				else if((*tree)->fb == 1)
-					*mudou = 1;
+					*mudou = 0; /*esta variavel é alterada para 0 para mostrar que não precisa mais ser verificado, visto que a arvore continua balanceada*/
 			}
 		}else if(strcmp(str, (*tree)->palavra) > 0){/*se a palavra for maior lexicograficamento eu busco na subarvore direita o elemento que vou remover*/
 			removeArvore((&(*tree)->dir), str, mudou);
-			if(*mudou == 1){
-				(*tree)->fb = (*tree)->fb - 1;
+			if(*mudou == 1){ /*se teve um no tiver sido removido, verifico se precisa fazer alguma rotacao*/
+				(*tree)->fb = (*tree)->fb - 1; /*decremento o fator de balanceamento pois o no removido foi do lado direito*/
 				if((*tree)->fb == -2){
 					if((*tree)->esq->fb <= 0){
 						rot_direita(tree);
 						if((*tree)->fb == -1)
-							*mudou = 0;
+							*mudou = 0; /*esta variavel é alterada para 0 para mostrar que não precisa mais ser verificado, visto que a arvore continua balanceada*/
 						else
 							*mudou = 1;
 					}else{
 						rot_dupla_direita(tree);
 						if((*tree)->fb == -1)
-							*mudou = 0;
+							*mudou = 0; /*esta variavel é alterada para 0 para mostrar que não precisa mais ser verificado, visto que a arvore continua balanceada*/
 						else
 							*mudou = 1;
 					}
 				}else if((*tree)->fb == 0)
 					*mudou = 1;
 				else if((*tree)->fb == -1)
-					*mudou = 0;
+					*mudou = 0; /*esta variavel é alterada para 0 para mostrar que não precisa mais ser verificado, visto que a arvore continua balanceada*/
 			}
 		}
 	}
